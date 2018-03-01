@@ -1,0 +1,46 @@
+---
+  # Title: Install Microsoft Dynamics NAV2017 Client
+  #
+  # Author: Luc Rutten
+  # Version: 1.0
+  #
+  # File: tasks/windows-x86.yml 
+
+
+  - name: "Check if package is allready installed before downloading installation files."
+    win_reg_stat:
+      path: HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\"{{ pkg_product_id }}"
+    register: package_installed
+
+  - name: "Create local Ansible repository"
+    win_file:
+      path: "{{ pkg_local_path }}"
+      state: directory
+    when:
+      - package_installed.exists == false
+
+  - name: "Download Package"
+    win_get_url:
+      url: "{{ pkg_remote_url }}"
+      dest: "{{ pkg_local_path }}/{{ pkg_name_zip }}"
+      force: no
+    when:
+      - package_installed.exists == false
+
+  - name: "Unzip package"
+    win_unzip:
+      src: "{{ pkg_local_path }}/{{ pkg_name_zip }}"
+      dest: "{{ pkg_local_path }}"
+
+  - name: "Installing {{ pkg_name }} (x86)"
+    win_package:
+      path: "{{ pkg_installer }}"
+      product_id: "{{ pkg_product_id }}"
+      arguments: "{{ pkg_arguments }}"
+      state: present
+
+  - name: "Removing installation files"
+    win_file:
+      path: "{{ pkg_local_path }}"
+      state: absent
+ 

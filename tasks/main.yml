@@ -1,0 +1,13 @@
+---
+  # Title: Install Microsoft Dynamics NAV2017 Client
+  #
+  # Author: Luc Rutten
+  # Version: 1.0
+  # 
+  # Supported operating systems:
+  #  - Windows 7/2k8r2 or higher
+
+  - name: "For OS: Windows, Arch: amd64"
+    import_tasks: windows-x86.yml
+    when:
+      - ansible_os_family == "Windows"

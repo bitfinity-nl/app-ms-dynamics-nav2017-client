@@ -1,0 +1,18 @@
+---
+  # Defaults:
+
+  # URL to remote package
+  pkg_remote_url : http://nl-bel-cmd01/resource/microsoft/dynamics/nav/2017/NAV2017.zip
+
+  # Path to local package
+  pkg_local_path : "{{ ansible_env.ProgramFiles }}/Ansible/temp/"
+
+  # Package settings
+  pkg_name       : "Microsoft Dynamics NAV2017 Client (x86)"
+  pkg_name_zip   : NAV2017.zip  
+  
+  pkg_product_id : {00000000-0000-0100-A577-0000836BD2D2}
+  pkg_installer  : "{{ pkg_local_path }}/nav2017/nl/setup.exe"
+  pkg_arguments  : "/quiet /config {{ pkg_local_path }}/nav2017/nl/NAV2017-VGG-CLIENT.xml /log C:\NAV2017-CLIENT.log"
+  
+
