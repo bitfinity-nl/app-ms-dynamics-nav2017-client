@@ -5,12 +5,12 @@
   # Version: 1.0
   #
   # Description: Install MS Dynamics NAV2017 client on Endpoint
-  # File: tasks/windows-x86.yml 
+  # File: tasks/windows-amd64.yml 
 
 
   - name: "Check if package is allready installed before downloading installation files."
     win_reg_stat:
-      path: HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\"{{ pkg_product_id }}"
+      path: "{{ pkg_reg_uninstall_path_amd64 }}{{ pkg_product_id_amd64 }}"
     register: pkg_isinstalled
 
   - name: "Create local Ansible repository"
@@ -22,24 +22,24 @@
 
   - name: "Download Package"
     win_get_url:
-      url: "{{ pkg_remote_url }}"
-      dest: "{{ pkg_local_path }}/{{ pkg_name_zip }}"
+      url: "{{ pkg_remote_url_amd64 }}"
+      dest: "{{ pkg_local_path }}/{{ pkg_name_zip_amd64 }}"
       force: no
     when:
       - pkg_isinstalled.exists == false
 
   - name: "Unzip package"
     win_unzip:
-      src: "{{ pkg_local_path }}/{{ pkg_name_zip }}"
+      src: "{{ pkg_local_path }}/{{ pkg_name_zip_amd64 }}"
       dest: "{{ pkg_local_path }}"
     when:
       - pkg_isinstalled.exists == false
 
-  - name: "Installing {{ pkg_name }} (x86)"
+  - name: "Installing {{ pkg_name }} (amd64)"
     win_package:
-      path: "{{ pkg_installer }}"
-      product_id: "{{ pkg_product_id }}"
-      arguments: "{{ pkg_arguments }}"
+      path: "{{ pkg_installer_amd64 }}"
+      product_id: "{{ pkg_product_id_amd64 }}"
+      arguments: "{{ pkg_arguments_amd64 }}"
       state: present
     when:
       - pkg_isinstalled.exists == false

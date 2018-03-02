@@ -1,18 +1,37 @@
 ---
-  # Defaults:
+  # Title: app-ms-dynamics-nav2017-client
+  #
+  # Author: Luc Rutten
+  # Version: 1.0
+  #
+  # Description: Install MS Dynamics NAV2017 client on Endpoint
+  # File: vars/main.yml
 
-  # URL to remote package
-  pkg_remote_url : http://nl-bel-cmd01/resource/microsoft/dynamics/nav/2017/NAV2017.zip
+
+  # --- Common settings ---
+  # Title of the package
+  pkg_name              : "Microsoft Dynamics NAV2017 Client"
 
   # Path to local package
-  pkg_local_path : "{{ ansible_env.ProgramFiles }}/Ansible/temp/"
+  pkg_local_path        : "{{ ansible_env.ProgramFiles }}/Ansible/temp/"
 
-  # Package settings
-  pkg_name       : "Microsoft Dynamics NAV2017 Client (x86)"
-  pkg_name_zip   : NAV2017.zip  
-  
-  pkg_product_id : {00000000-0000-0100-A577-0000836BD2D2}
-  pkg_installer  : "{{ pkg_local_path }}/nav2017/nl/setup.exe"
-  pkg_arguments  : "/quiet /config {{ pkg_local_path }}/nav2017/nl/NAV2017-VGG-CLIENT.xml /log C:\NAV2017-CLIENT.log"
-  
 
+  # --- Specifick (x86) package settings ---
+  pkg_remote_url        : http://nl-bel-cmd01/resource/microsoft/dynamics/nav/2017/NAV2017.zip
+  pkg_name_zip          : NAV2017.zip  
+  pkg_product_id        : DynamicsNav100
+  pkg_installer         : '{{ pkg_local_path }}/nav2017/nl/setup.exe'
+  pkg_arguments         : /quiet /config "{{ pkg_local_path }}/NAV2017/NL/NAV2017-VGG-CLIENT.xml"  
+
+
+  # --- Specific (amd64) package settings ---
+  
+  # Uncomment the line which key to check. (Wow6432Node = 32bit)
+  # pkg_reg_uninstall_path_amd64 : HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\
+  pkg_reg_uninstall_path_amd64 : HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\ 
+  
+  pkg_remote_url_amd64   : "{{ pkg_remote_url }}"
+  pkg_name_zip_amd64     : "{{ pkg_name_zip }}"
+  pkg_product_id_amd64   : "{{ pkg_product_id }}"
+  pkg_installer_amd64    : "{{ pkg_installer }}"
+  pkg_arguments_amd64    : "{{ pkg_arguments }}"
